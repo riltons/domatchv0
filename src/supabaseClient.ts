@@ -1,16 +1,12 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
 
-if (typeof window !== "undefined" && (!supabaseUrl || !supabaseAnonKey)) {
-  console.error("As variáveis de ambiente do Supabase não estão configuradas.")
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error("Variáveis de ambiente do Supabase não configuradas")
 }
 
-export const supabase = createClient(
-  supabaseUrl || "https://placeholder-url.supabase.co",
-  supabaseAnonKey || "placeholder-key",
-)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-export const isSupabaseConfigured = !!supabaseUrl && !!supabaseAnonKey
-
+export const isSupabaseConfigured = true
