@@ -62,13 +62,23 @@ const Login = () => {
         password: formData.password,
       });
 
-      if (signInError) throw signInError;
+      if (signInError) {
+        console.error('Detalhes do erro:', signInError);
+        if (signInError.message.includes('Email not confirmed')) {
+          throw new Error('Por favor, confirme seu email antes de fazer login. Verifique sua caixa de entrada.');
+        }
+        throw signInError;
+      }
 
       // Login bem-sucedido, redirecionar para a página principal
       navigate('/');
     } catch (error) {
       console.error('Erro no login:', error);
-      setError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+      if (error.message === 'Invalid login credentials') {
+        setError('Email ou senha incorretos. Por favor, verifique suas credenciais.');
+      } else {
+        setError(error.message || 'Erro ao fazer login. Verifique suas credenciais.');
+      }
     } finally {
       setLoading(false);
     }
